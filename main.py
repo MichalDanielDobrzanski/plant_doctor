@@ -9,6 +9,8 @@ from fastai import *
 from fastai.vision.all import *
 import os
 from os import listdir
+import argparse
+from matplotlib import pyplot
 
 print(f"Is CUDA available: {torch.cuda.is_available()}")
 
@@ -31,11 +33,14 @@ defaults.device = torch.device('cpu')
 # batch_tfms = [Normalize()]
 # batch_tfms = [Resize(256), Normalize()]
 batch_tfms = [Resize(256)]
-
-
 dls = ImageDataLoaders.from_name_func(get_dir(), files, label_func=get_label, bs=64, item_tfms=batch_tfms,device=torch.device('cpu'))
-dls.show_batch()
+parser = argparse.ArgumentParser(
+    description='A transfer learning DNN network' 
+)
+parser.add_argument('--display',action='store_true')
+args = parser.parse_args()
 
-
-from matplotlib import pyplot
-pyplot.show()
+if args.display:
+    print("Displaying...")
+    dls.show_batch()
+    pyplot.show()
